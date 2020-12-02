@@ -28,7 +28,7 @@ def getStatus():
 
 def createEmbed(title, episode, link):
     embed = discord.Embed(
-        title='Jujutsu Kaisen',
+        title=title,
         description='Episode ' + str(episode) + ' just released',
         colour=discord.Colour.blue()
     )
