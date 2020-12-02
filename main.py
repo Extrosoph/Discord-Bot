@@ -142,20 +142,47 @@ async def on_member_join(member):
         f'Hi {member.name}, welcome to SkyVision Discord server!'
     )
 
-#Need to work on
 @client.event
-async def on_reaction_add(reaction, user):
-    print('yay')
-    Channel = 783315915982241842
-    if reaction.message.channel.id != Channel:
-        return
-    print(reaction.emoji)
-    if reaction.emoji == ":emoji_5:":
-      Role = discord.utils.get(user.server.roles, name="Genshin Players")
-      await client.add_roles(user, Role)
-    if reaction.emoji == ":race_car:":
-        Role = discord.utils.get(user.server.roles, name="RL players")
-        await client.add_roles(user, Role)
+async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
+    if message_id == 783523446142664715:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'Rocketleague':
+            role = discord.utils.get(guild.roles, name='RL players')
+        elif payload.emoji.name == '3842_PaimonAngry':
+            role = discord.utils.get(guild.roles, name='Genshin players')
+        elif payload.emoji.name == 'csgo':
+            role = discord.utils.get(guild.roles, name='CSGO')
+        else:
+            role = discord.utils.get(guild.roles, name=payload.emoji.name)
+
+        if role is not None:
+            member = payload.member
+            if member is not None:
+                await member.add_roles(role)
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    if message_id == 783523446142664715:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'Rocketleague':
+            role = discord.utils.get(guild.roles, name='RL players')
+        elif payload.emoji.name == '3842_PaimonAngry':
+            role = discord.utils.get(guild.roles, name='Genshin players')
+        elif payload.emoji.name == 'csgo':
+            role = discord.utils.get(guild.roles, name='CSGO')
+        else:
+            role = discord.utils.get(guild.roles, name=payload.emoji.name)
+
+        if role is not None:
+            member = payload.member
+            if member is not None:
+                await member.remove_roles(role)
 
 client.loop.create_task(annoucement())
 client.run(TOKEN)
