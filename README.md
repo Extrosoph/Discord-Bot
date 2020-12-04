@@ -19,3 +19,4 @@ Check logs:
 
 heroku logs -a sopher-bot
 
+### Certain files are kept hidden for privacy ###
