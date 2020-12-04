@@ -26,7 +26,7 @@ async def on_ready():
 @client.event
 async def weather():
     await client.wait_until_ready()
-    channel = client.get_channel(782857465107578892)
+    channel = client.get_channel('your channel id')
     while not client.is_closed():
         now_utc = datetime.now()
         perthHour = now_utc.astimezone(timezone('Australia/Perth')).hour
@@ -46,7 +46,7 @@ async def weather():
 @client.event
 async def annoucement():
     await client.wait_until_ready()
-    channel = client.get_channel(781035666553307136)
+    channel = client.get_channel('your channel id')
     while not client.is_closed():
         animes = checkNewEpisode()
         if animes != False:
@@ -65,7 +65,7 @@ async def on_member_join(member):
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == 783523446142664715:
+    if message_id == 'your channel id':
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
 
@@ -86,7 +86,7 @@ async def on_raw_reaction_add(payload):
 @client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
-    if message_id == 783523446142664715:
+    if message_id == 'your channel id':
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
