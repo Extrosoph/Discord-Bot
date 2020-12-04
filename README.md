@@ -6,6 +6,9 @@ This is a discord bot for my channel which has a few features:
 
 TODO:
 1. Fix the role removal function as it doesn`t remove the role if the reaction is removed
+2. Add a feature to add anime to the log file from discord messages
+3. Add sunset and sunrise time
+
 
 Git updates:
 
