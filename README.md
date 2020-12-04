@@ -8,7 +8,7 @@ TODO:
 1. Fix the role removal function as it doesn`t remove the role if the reaction is removed
 2. Add a feature to add anime to the log file from discord messages
 3. Add sunset and sunrise time
-
+4. Fix weather forecast timing
 
 Git updates:
 
