@@ -11,7 +11,7 @@ Git updates:
 
 1. heroku login
 2. git add .
-3. git commit -am "cool"
+3. git commit -am "need to add a message"
 4. git push heroku master
 5. heroku ps:scale worker=1
 
