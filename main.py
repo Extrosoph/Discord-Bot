@@ -3,6 +3,8 @@ from AnimeAnnoucement import checkNewEpisode
 from Functions import getTemp
 from Functions import getStatus
 from Functions import createEmbed
+from datetime import datetime
+from pytz import timezone
 import asyncio
 import os
 import discord
@@ -26,29 +28,30 @@ async def weather():
     await client.wait_until_ready()
     channel = client.get_channel(782857465107578892)
     while not client.is_closed():
-        temp = getTemp()
-        image, status = getStatus()
-        embed = discord.Embed(
-            title='Weather forecast',
-            description='Temperature: ' + str(temp) + 'C\n\n' + status,
-            colour=discord.Colour.blue()
-        )
-        embed.set_image(url=image)
-        await channel.send(embed=embed)
-        await asyncio.sleep(21600)
+        now_utc = datetime.now()
+        perthHour = now_utc.astimezone(timezone('Australia/Perth')).hour
+        perthMinutes = now_utc.astimezone(timezone('Australia/Perth')).minute
+        if perthHour == (7 or 12 or 18) and perthMinutes == 30:
+            temp = getTemp()
+            image, status = getStatus()
+            embed = discord.Embed(
+                title='Weather forecast',
+                description='Temperature: ' + str(temp) + 'C\n\n' + status,
+                colour=discord.Colour.blue()
+            )
+            embed.set_image(url=image)
+            await channel.send(embed=embed)
+        await asyncio.sleep(1)
 
 @client.event
 async def annoucement():
     await client.wait_until_ready()
     channel = client.get_channel(781035666553307136)
     while not client.is_closed():
-        names = ['Jujutsu Kaisen', 'Tonikaku Kawaii', 'Black Clover', 'The day I became a God', 'Talentless Nana',
-                 'I m Standing On 1 000 000 Lives', 'Our Last Crusade Or The Rise Of A New World',
-                 'By The Grace Of The Gods', 'Noblesse']
-        for anime in names:
-            episode, link = checkNewEpisode(anime)
-            if episode != False:
-                embed = createEmbed(anime, episode, link)
+        animes = checkNewEpisode()
+        if animes != False:
+            for anime in animes:
+                embed = createEmbed(anime[0],anime[1],anime[2])
                 await channel.send(embed=embed)
         await asyncio.sleep(900)
 
