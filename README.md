@@ -8,10 +8,14 @@ TODO:
 1. Fix the role removal function as it doesn`t remove the role if the reaction is removed
 
 Git updates:
-heroku login
-git add .
-git commit -am "cool"
-git push heroku master
-heroku ps:scale worker=1
+
+1. heroku login
+2. git add .
+3. git commit -am "cool"
+4. git push heroku master
+5. heroku ps:scale worker=1
+
+Check logs:
+
 heroku logs -a sopher-bot
 
