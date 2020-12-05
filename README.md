@@ -15,7 +15,7 @@ TODO:
 Git commands:
 ============
 **1. Loging:**\
-heroku login
+heroku login\
 **2. Add and Commits:**\
 git commit -am "message"\
 **3. Push after add:**\
