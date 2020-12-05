@@ -11,8 +11,8 @@ TODO:
 4. Fix weather forecast timing
 
 Git commands:
-1. Loging:
-  heroku login
+1. Loging:\n
+heroku login
 2. Add and Commits:
 git commit -am "message"
 3. Push after add:
@@ -28,5 +28,7 @@ git diff
 if no differences it will be empty
 8. Check status:
 git status
+9. Check latest version:
+git log -1
 
 ### Certain files are kept hidden for privacy ###
