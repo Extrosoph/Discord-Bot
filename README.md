@@ -1,5 +1,6 @@
 # Discord-Bot
-#This is a discord bot for my channel which has a few features:#
+This is a discord bot for my channel which has a few features:
+=============================================================
 1. Weather Forecast at 7:30, 12:30 and 18:30 am Perth time to tell the weather and the status
 2. Annouces new ongoing episode that is just released based on a website using a logger file
 3. Gives roles based on a reaction on a message
