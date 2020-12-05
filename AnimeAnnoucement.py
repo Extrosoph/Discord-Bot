@@ -86,9 +86,14 @@ def checkNewEpisode():
                     rewrite += str(data[i]) + '\n'
                 i += 1
             if new == True:
-                final = ''
-                for episodes in data[-1]:
-                    final += str(episodes) + ','
+                print(data[-1])
+                if type(data[-1]) == list:
+                    final = ''
+                    for episodes in data[-1]:
+                        final += str(episodes) + ','
+                    rewrite += final
+                else:
+                    rewrite += data[-1]
                 file.seek(0, 0)
                 file.write(rewrite)
                 file.close()
