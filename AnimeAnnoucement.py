@@ -86,7 +86,6 @@ def checkNewEpisode():
                     rewrite += str(data[i]) + '\n'
                 i += 1
             if new == True:
-                print(data[-1])
                 if type(data[-1]) == list:
                     final = ''
                     for episodes in data[-1]:
