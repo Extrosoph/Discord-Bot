@@ -17,20 +17,20 @@ Git commands:
 **1. Loging:**\
 heroku login
 **2. Add and Commits:**\
-git commit -am "message"
+git commit -am "message"\
 **3. Push after add:**\
-git push heroku master
+git push heroku master\
 **4. Scale worker after push:**\
-heroku ps:scale worker=1
+heroku ps:scale worker=1\
 **5. Check logs:**\
-heroku logs -a sopher-bot
+heroku logs -a sopher-bot\
 **6. View files:**\
-git show master:'file name'
+git show master:'file name'\
 **7. Check differences:**\
-git diff
-if no differences it will be empty
+git diff\
+if no differences it will be empty\
 **8. Check status:**\
-git status
+git status\
 **9. Check latest version:**\
 git log -1
 
