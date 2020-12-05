@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 from AnimeAnnoucement import checkNewEpisode
-from Functions import getTemp
-from Functions import getStatus
-from Functions import createEmbed
+from utilities import getDailyTemps
+from utilities import createEmbed
 from datetime import datetime
 from pytz import timezone
 import asyncio
@@ -26,17 +25,17 @@ async def on_ready():
 @client.event
 async def weather():
     await client.wait_until_ready()
-    channel = client.get_channel('your channel id')
+    channel = client.get_channel(782857465107578892)
     while not client.is_closed():
         now_utc = datetime.now()
         perthHour = now_utc.astimezone(timezone('Australia/Perth')).hour
         perthMinutes = now_utc.astimezone(timezone('Australia/Perth')).minute
-        if perthHour == (7 or 12 or 18) and perthMinutes == 30:
-            temp = getTemp()
-            image, status = getStatus()
+        perthSeconds = now_utc.astimezone(timezone('Australia/Perth')).second
+        if (perthHour == 7 or perthHour == 12 or perthHour == 18) and perthMinutes == 30 and perthSeconds == 1:
+            temperature, status, image = getDailyTemps()
             embed = discord.Embed(
-                title='Weather forecast',
-                description='Temperature: ' + str(temp) + 'C\n\n' + status,
+                title='Daily Temperatures',
+                description='Temperature: ' + temperature + '\n\n' + status,
                 colour=discord.Colour.blue()
             )
             embed.set_image(url=image)
@@ -46,11 +45,12 @@ async def weather():
 @client.event
 async def annoucement():
     await client.wait_until_ready()
-    channel = client.get_channel('your channel id')
+    channel = client.get_channel(781035666553307136)
     while not client.is_closed():
         animes = checkNewEpisode()
         if animes != False:
             for anime in animes:
+                anime = anime.split(',')
                 embed = createEmbed(anime[0],anime[1],anime[2])
                 await channel.send(embed=embed)
         await asyncio.sleep(900)
@@ -65,7 +65,7 @@ async def on_member_join(member):
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == 'your channel id':
+    if message_id == 783523446142664715:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
 
@@ -86,7 +86,7 @@ async def on_raw_reaction_add(payload):
 @client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
-    if message_id == 'your channel id':
+    if message_id == 783523446142664715:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
