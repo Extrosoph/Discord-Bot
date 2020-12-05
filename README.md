@@ -10,16 +10,23 @@ TODO:
 3. Add sunset and sunrise time
 4. Fix weather forecast timing
 
-Git updates:
-
-1. heroku login
-2. git add .
-3. git commit -am "need to add a message"
-4. git push heroku master
-5. heroku ps:scale worker=1
-
-Check logs:
-
+Git commands:
+1. Loging:
+  heroku login
+2. Add and Commits:
+git commit -am "message"
+3. Push after add:
+git push heroku master
+4. Scale worker after push:
+heroku ps:scale worker=1
+5. Check logs:
 heroku logs -a sopher-bot
+6. View files:
+git show master:'file name'
+7. Check differences:
+git diff
+if no differences it will be empty
+8. Check status:
+git status
 
 ### Certain files are kept hidden for privacy ###
