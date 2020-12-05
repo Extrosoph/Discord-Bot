@@ -14,7 +14,7 @@ TODO:
 
 Git commands:
 ============
-1. Loging:\
+1. Loging:
 -----------
 heroku login
 2. Add and Commits:
