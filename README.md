@@ -11,7 +11,7 @@ TODO:
 4. Fix weather forecast timing
 
 Git commands:
-1. Loging:\n
+1. Loging: '\n'
 heroku login
 2. Add and Commits:
 git commit -am "message"
