@@ -71,9 +71,6 @@ def checkNewEpisode():
                             anime = data[i] + ',' + str(newEpisodes[-1]) + ',' + link
                             newAnimes.append(anime)
                             new = True
-                else:
-                    del data[i]
-                    del data[i+1]
             rewrite = ''
             i = 0
             while i < len(data)-1:
@@ -103,3 +100,29 @@ def checkNewEpisode():
                 file.write(rewrite)
                 file.close()
                 return False
+
+def adds(anime):
+    #Prepare title name
+    name = anime.split(' ')
+    title = ''
+    for words in name:
+        try:
+            words = words[0].upper() + words[1:]
+            title += words + ' '
+        except:
+            title += words + ' '
+    title = title[:-1]
+    name = title.replace(' ', '-')
+    episodes, link, status = getEpisodes(name)
+    reversed = episodes[::-1]
+    ep = ''
+    for episode in reversed:
+        ep += str(episode) + ','
+    data = '\n' + title + '\n' + ep
+    #append to watchlist
+    file_exists = os.path.exists('logger.txt')
+    if file_exists:
+        with open('logger.txt', 'a+') as file:
+            file.write(data)
+            file.close()
+    return title, episodes[0], link
