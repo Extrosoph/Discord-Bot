@@ -1,16 +1,17 @@
 # Discord-Bot
 This is a discord bot for my channel which has a few features:
 ==============================================================
-1. Weather Forecast at 7:30, 12:30 and 18:30 Perth time to tell the temperature and the status
+1. Weather Forecast at 7:30, 12:30 and 18:30 Perth time to state the temperature and the status
 2. Annouces new ongoing episode that is just released based on a website using a logger file
+3. Functions to add and remove anime from the bulletin
 3. Gives roles based on a reaction on a message
 
 TODO:
 =======
 1. Fix the role removal function as it doesn`t remove the role if the reaction is removed
-2. Add a feature to add anime to the log file from discord messages
+2. Add a checker to the anime adds function to not add if it is already on the bulletin
 3. Add sunset and sunrise time
-4. Fix weather forecast timing
+4. Add a remove feature to remove anime from bulletin
 
 Git commands:
 ============
