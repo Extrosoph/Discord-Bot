@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
-from AnimeAnnoucement import checkNewEpisode
-from utilities import getDailyTemps
-from utilities import createEmbed
-from datetime import datetime
+from AnimeAnnoucement import checkNewEpisode, adds
+from utilities import getDailyTemps, createEmbed
+from datetime import datetime, timedelta
 from pytz import timezone
+from discord.ext import commands
 import asyncio
 import os
 import discord
@@ -15,7 +15,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')[1:-1]
 GUILD = os.getenv('DISCORD_GUILD')[1:-1]
 
-client = discord.Client()
+client = commands.Bot(command_prefix='.')
 
 @client.event
 async def on_ready():
@@ -54,6 +54,16 @@ async def annoucement():
                 embed = createEmbed(anime[0],anime[1],anime[2])
                 await channel.send(embed=embed)
         await asyncio.sleep(900)
+
+@client.event
+async def delete():
+    await client.wait_until_ready()
+    while not client.is_closed():
+        channel = client.get_channel(781035666553307136)
+        await channel.purge(before=datetime.now() - timedelta(days=14))
+        channel = client.get_channel(782857465107578892)
+        await channel.purge(before=datetime.now() - timedelta(days=3))
+        await asyncio.sleep(1209600)
 
 @client.event
 async def on_member_join(member):
@@ -104,6 +114,22 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)
 
+@client.command()
+async def add(ctx, *args):
+    anime = ''
+    for arg in args:
+        anime += arg + ' '
+    name, episode, link = adds(anime[:-1])
+    embed = discord.Embed(
+        title=name,
+        description='Added to bulletin' + '\n\n' + 'Latest episode is ' + str(episode) + '.',
+        colour=discord.Colour.blue()
+    )
+    embed.set_image(url=link)
+    await ctx.send(embed=embed)
+
+
 client.loop.create_task(weather())
 client.loop.create_task(annoucement())
+client.loop.create_task(delete())
 client.run(TOKEN)
