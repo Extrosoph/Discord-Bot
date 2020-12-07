@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from AnimeAnnoucement import checkNewEpisode, adds
-from utilities import getDailyTemps, createEmbed
+from utilities import getDailyTemps, createEmbed, getSunsetAndSunrise
 from datetime import datetime, timedelta
 from pytz import timezone
 from discord.ext import commands
@@ -31,10 +31,20 @@ async def weather():
         perthHour = now_utc.astimezone(timezone('Australia/Perth')).hour
         perthMinutes = now_utc.astimezone(timezone('Australia/Perth')).minute
         perthSeconds = now_utc.astimezone(timezone('Australia/Perth')).second
-        if (perthHour == 7 or perthHour == 12 or perthHour == 18) and perthMinutes == 30 and perthSeconds == 1:
+        if perthHour == 7 and perthMinutes == 30 and perthSeconds == 1:
+            temperature, status, image = getDailyTemps()
+            sunrise, sunset = getSunsetAndSunrise()
+            embed = discord.Embed(
+                title='Morning status',
+                description='Temperature: ' + temperature + '\n' +'Status: ' + status + '\n' + 'Sunrise: ' + sunrise + '\n' + 'Sunset: ' + sunset,
+                colour=discord.Colour.blue()
+            )
+            embed.set_image(url=image)
+            await channel.send(embed=embed)
+        if (perthHour == 12 or perthHour == 18) and perthMinutes == 30 and perthSeconds == 1:
             temperature, status, image = getDailyTemps()
             embed = discord.Embed(
-                title='Daily Temperatures',
+                title='Afternoon status',
                 description='Temperature: ' + temperature + '\n\n' + status,
                 colour=discord.Colour.blue()
             )
@@ -63,7 +73,7 @@ async def delete():
         await channel.purge(before=datetime.now() - timedelta(days=14))
         channel = client.get_channel(782857465107578892)
         await channel.purge(before=datetime.now() - timedelta(days=3))
-        await asyncio.sleep(1209600)
+        await asyncio.sleep(86400)
 
 @client.event
 async def on_member_join(member):
