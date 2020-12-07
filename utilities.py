@@ -15,6 +15,19 @@ def getDailyTemps():
     link = part.find('img')['src']
     return temp, status, link
 
+def getSunsetAndSunrise():
+    url = 'https://www.timeanddate.com/sun/australia/perth'
+    uClient = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(uClient).read()
+    webpage = webpage.decode('utf-8')
+    soup = BeautifulSoup(webpage, 'html.parser')
+    part = soup.find('div',class_='bk-focus__info')
+    set = part.find_all('td')[6].getText().split(' ')[:2]
+    rise = part.find_all('td')[5].getText().split(' ')[:2]
+    sunrise = rise[0] + ' ' + rise[1][:-1]
+    sunset = set[0] + ' ' + set[1][:-1]
+    return sunrise, sunset
+
 def createEmbed(title, episode, link):
     embed = discord.Embed(
         title=title,
