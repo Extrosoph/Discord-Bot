@@ -11,7 +11,7 @@ TODO:
 =======
 1. Fix the role removal function as it doesn`t remove the role if the reaction is removed
 2. Add a checker to the anime adds function to not add if it is already on the bulletin
-3. Add a remove feature to remove anime from bulletin
+3. Fix why the announcement is send the message twice in the bulletin
 
 Git commands:
 ============
