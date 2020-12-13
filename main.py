@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from AnimeAnnoucement import checkNewEpisode, adds
+from AnimeAnnoucement import checkNewEpisode, adds, listAllBulletin, listEpisodes, removes
 from utilities import getDailyTemps, createEmbed, getSunsetAndSunrise
 from datetime import datetime, timedelta
 from pytz import timezone
@@ -31,24 +31,27 @@ async def weather():
         perthHour = now_utc.astimezone(timezone('Australia/Perth')).hour
         perthMinutes = now_utc.astimezone(timezone('Australia/Perth')).minute
         perthSeconds = now_utc.astimezone(timezone('Australia/Perth')).second
+        #Set morning status
         if perthHour == 7 and perthMinutes == 30 and perthSeconds == 1:
             temperature, status, image = getDailyTemps()
             sunrise, sunset = getSunsetAndSunrise()
-            embed = discord.Embed(
-                title='Morning status',
-                description='Temperature: ' + temperature + '\n' +'Status: ' + status + '\n' + 'Sunrise: ' + sunrise + '\n' + 'Sunset: ' + sunset,
-                colour=discord.Colour.blue()
-            )
-            embed.set_image(url=image)
+            title = 'Morning Status'
+            description = 'Temperature: ' + temperature + '\n' +'Status: ' + status + '\n' + 'Sunrise: ' + sunrise + '\n' + 'Sunset: ' + sunset
+            embed = createEmbed(title, description, image)
             await channel.send(embed=embed)
-        if (perthHour == 12 or perthHour == 18) and perthMinutes == 30 and perthSeconds == 1:
+        #Set noon status
+        if perthHour == 12 and perthMinutes == 30 and perthSeconds == 1:
             temperature, status, image = getDailyTemps()
-            embed = discord.Embed(
-                title='Afternoon status',
-                description='Temperature: ' + temperature + '\n\n' + status,
-                colour=discord.Colour.blue()
-            )
-            embed.set_image(url=image)
+            title = 'Noon Status'
+            description = 'Temperature: ' + temperature + '\n\n' + status
+            embed = createEmbed(title, description, image)
+            await channel.send(embed=embed)
+        #Set afternoon status
+        if perthHour == 18 and perthMinutes == 30 and perthSeconds == 1:
+            temperature, status, image = getDailyTemps()
+            title = 'Noon Status'
+            description = 'Temperature: ' + temperature + '\n\n' + status
+            embed = createEmbed(title, description, image)
             await channel.send(embed=embed)
         await asyncio.sleep(1)
 
@@ -58,10 +61,14 @@ async def annoucement():
     channel = client.get_channel(781035666553307136)
     while not client.is_closed():
         animes = checkNewEpisode()
-        if animes != False:
+        if(animes == -1):
+            await channel.send('Failed to update bulletin')
+        elif animes != False:
             for anime in animes:
-                anime = anime.split(',')
-                embed = createEmbed(anime[0],anime[1],anime[2])
+                title = anime.split(',')
+                description = 'Episode: ' + anime[1] + ' just released.'
+                link = anime[2]
+                embed = createEmbed(title,description,link)
                 await channel.send(embed=embed)
         await asyncio.sleep(900)
 
@@ -129,14 +136,46 @@ async def add(ctx, *args):
     anime = ''
     for arg in args:
         anime += arg + ' '
-    name, episode, link = adds(anime[:-1])
-    embed = discord.Embed(
-        title=name,
-        description='Added to bulletin' + '\n\n' + 'Latest episode is ' + str(episode) + '.',
-        colour=discord.Colour.blue()
-    )
-    embed.set_image(url=link)
-    await ctx.send(embed=embed)
+    anime = anime[:-1]
+    if adds(anime) == -1:
+        await ctx.send('Failed to update')
+    else:
+        name, episode, link = adds(anime[:-1])
+        title = name
+        description = 'Added to bulletin' + '\n\n' + 'Latest episode is ' + str(episode) + '.'
+        embed = createEmbed(title, description, link)
+        await ctx.send(embed=embed)
+
+@client.command()
+async def listAll(ctx, *args):
+    summary = listAllBulletin()
+    await ctx.send(summary)
+
+@client.command()
+async def listEp(ctx, *args):
+    anime = ''
+    for arg in args:
+        anime += arg + ' '
+    anime = anime[:-1]
+    if listEpisodes(anime) == -1:
+        await ctx.send('Not in the list')
+    else:
+        eps, link = listEpisodes(anime)
+        embed = createEmbed(anime, eps, link)
+        await ctx.send(embed=embed)
+
+@client.command()
+async def remove(ctx, *args):
+    anime = ''
+    for arg in args:
+        anime += arg + ' '
+    anime = anime[:-1]
+    if listEpisodes(anime) == -1:
+        await ctx.send('Not in the list')
+    else:
+        eps, link = removes(anime)
+        embed = createEmbed(anime, eps, link)
+        await ctx.send(embed=embed)
 
 
 client.loop.create_task(weather())
