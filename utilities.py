@@ -28,10 +28,10 @@ def getSunsetAndSunrise():
     sunset = set[0] + ' ' + set[1][:-1]
     return sunrise, sunset
 
-def createEmbed(title, episode, link):
+def createEmbed(title, description, link):
     embed = discord.Embed(
         title=title,
-        description='Episode ' + str(episode) + ' just released',
+        description= description,
         colour=discord.Colour.blue()
     )
     embed.set_image(url=link)
