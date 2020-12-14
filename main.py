@@ -25,7 +25,7 @@ async def on_ready():
 @client.event
 async def weather():
     await client.wait_until_ready()
-    channel = client.get_channel(782857465107578892)
+    channel = client.get_channel('your channel name')
     while not client.is_closed():
         now_utc = datetime.now()
         perthHour = now_utc.astimezone(timezone('Australia/Perth')).hour
@@ -58,16 +58,16 @@ async def weather():
 @client.event
 async def annoucement():
     await client.wait_until_ready()
-    channel = client.get_channel(781035666553307136)
+    channel = client.get_channel('your channel name')
     while not client.is_closed():
         animes = checkNewEpisode()
         if(animes == -1):
             await channel.send('Failed to update bulletin')
         elif animes != False:
             for anime in animes:
-                title = anime.split(',')
+                title = anime.split(',')[0]
                 description = 'Episode: ' + anime[1] + ' just released.'
-                link = anime[2]
+                link = anime.split(',')[2]
                 embed = createEmbed(title,description,link)
                 await channel.send(embed=embed)
         await asyncio.sleep(900)
@@ -76,9 +76,9 @@ async def annoucement():
 async def delete():
     await client.wait_until_ready()
     while not client.is_closed():
-        channel = client.get_channel(781035666553307136)
+        channel = client.get_channel('your channel name')
         await channel.purge(before=datetime.now() - timedelta(days=14))
-        channel = client.get_channel(782857465107578892)
+        channel = client.get_channel('your channel name')
         await channel.purge(before=datetime.now() - timedelta(days=3))
         await asyncio.sleep(86400)
 
@@ -92,7 +92,7 @@ async def on_member_join(member):
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == 783523446142664715:
+    if message_id == 'your channel name':
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
 
@@ -113,7 +113,7 @@ async def on_raw_reaction_add(payload):
 @client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
-    if message_id == 783523446142664715:
+    if message_id == 'your channel name':
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
@@ -137,13 +137,15 @@ async def add(ctx, *args):
     for arg in args:
         anime += arg + ' '
     anime = anime[:-1]
-    if adds(anime) == -1:
-        await ctx.send('Failed to update')
+    test, test2, full = adds(anime)
+    if test == -1:
+        await ctx.send('Failed to get episodes')
+    elif test == 2:
+        await ctx.send('Already in the bulletin')
     else:
-        name, episode, link = adds(anime[:-1])
-        title = name
-        description = 'Added to bulletin' + '\n\n' + 'Latest episode is ' + str(episode) + '.'
-        embed = createEmbed(title, description, link)
+        title = test
+        description = 'Added to bulletin' + '\n\n' + 'Latest episode is ' + str(test2) + '.'
+        embed = createEmbed(title, description, full)
         await ctx.send(embed=embed)
 
 @client.command()
@@ -157,11 +159,11 @@ async def listEp(ctx, *args):
     for arg in args:
         anime += arg + ' '
     anime = anime[:-1]
-    if listEpisodes(anime) == -1:
+    test, full = listEpisodes(anime)
+    if test == 2:
         await ctx.send('Not in the list')
     else:
-        eps, link = listEpisodes(anime)
-        embed = createEmbed(anime, eps, link)
+        embed = createEmbed(anime, test, full)
         await ctx.send(embed=embed)
 
 @client.command()
@@ -170,12 +172,11 @@ async def remove(ctx, *args):
     for arg in args:
         anime += arg + ' '
     anime = anime[:-1]
-    if listEpisodes(anime) == -1:
+    test = removes(anime)
+    if test == 2:
         await ctx.send('Not in the list')
     else:
-        eps, link = removes(anime)
-        embed = createEmbed(anime, eps, link)
-        await ctx.send(embed=embed)
+        await ctx.send(anime + ' successfully removed.')
 
 
 client.loop.create_task(weather())
