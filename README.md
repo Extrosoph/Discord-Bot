@@ -8,6 +8,11 @@ This is a discord bot for my channel which has a few features:
 5. Functions to list all anime in the bulletin or list only episodes of a specific anime
 5. Gives roles based on a reaction on a message
 
+Format of Logger File:
+======================
+Anime name\n
+episodes seperated by commas
+
 TODO:
 =======
 1. Fix the role removal function as it doesn`t remove the role if the reaction is removed
