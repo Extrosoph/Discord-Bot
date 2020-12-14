@@ -10,7 +10,7 @@ This is a discord bot for my channel which has a few features:
 
 Format of Logger File:
 ======================
-Anime name\n
+Anime name\n\
 episodes seperated by commas
 
 TODO:
