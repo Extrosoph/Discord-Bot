@@ -5,6 +5,7 @@ This is a discord bot for my channel which has a few features:
 2. Tells the sunrise and sunset times for Perth in the morning status
 3. Annouces new ongoing episode that is just released based on a website using a logger file
 4. Functions to add and remove anime from the bulletin
+5. Functions to list all anime in the bulletin or list only episodes of a specific anime
 5. Gives roles based on a reaction on a message
 
 TODO:
